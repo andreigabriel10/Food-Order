@@ -1,51 +1,21 @@
 package com.food.order.services;
 
+import com.food.order.models.dto.OrderDTO;
 import com.food.order.models.dto.UserDTO;
-import com.food.order.models.entities.User;
-import com.food.order.repositories.UserRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
 
-@Service
-@Transactional
-public class UserService {
-    private final UserRepository userRepository;
+import java.util.List;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+public interface UserService {
 
-    public UserDTO createUser(UserDTO userDTO) {
-        User user = new User();
-        user.setUsername(userDTO.getUsername());
-        user.setEmail(userDTO.getEmail());
+    UserDTO createUser(UserDTO userDTO);
 
-        User createdUser = userRepository.save(user);
+    UserDTO updateUserProfile(Long id, UserDTO userDTO);
 
-        return new UserDTO(createdUser.getUserId(), createdUser.getUsername(), createdUser.getEmail());
-    }
+    void deleteUserById(Long id);
 
-    public UserDTO getUserById(Long userId) {
-        return userRepository.findById(userId)
-                .map(user -> new UserDTO(user.getUserId(), user.getUsername(), user.getEmail()))
-                .orElse(null);
-    }
+    List<UserDTO> getUsers();
 
-    public UserDTO updateUser(Long userId, UserDTO userDTO) {
-        return userRepository.findById(userId).map(user -> {
-            user.setUsername(userDTO.getUsername());
-            user.setEmail(userDTO.getEmail());
+    UserDTO getUserById(Long id);
 
-            User updatedUser = userRepository.save(user);
-
-            return new UserDTO(updatedUser.getUserId(), updatedUser.getUsername(), updatedUser.getEmail());
-        }).orElse(null);
-    }
-
-    public boolean deleteUser(Long userId) {
-        return userRepository.findById(userId).map(user -> {
-            userRepository.delete(user);
-            return true;
-        }).orElse(false);
-    }
+    OrderDTO createOrder(Long userId, OrderDTO orderDTO);
 }

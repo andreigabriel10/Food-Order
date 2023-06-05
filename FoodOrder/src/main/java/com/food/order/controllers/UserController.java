@@ -1,13 +1,16 @@
 package com.food.order.controllers;
 
+import com.food.order.models.dto.OrderDTO;
 import com.food.order.models.dto.UserDTO;
 import com.food.order.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/users")
 public class UserController {
     private final UserService userService;
 
@@ -15,40 +18,29 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
-        UserDTO createdUser = userService.createUser(userDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+    @PostMapping("/users")
+    public ResponseEntity<UserDTO> createUser(@RequestBody @Valid UserDTO userDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(userDTO));
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Long userId) {
-        UserDTO user = userService.getUserById(userId);
-        if (user != null) {
-            return ResponseEntity.ok(user);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @PutMapping("/users/{id}")
+    public ResponseEntity<UserDTO> updateUserProfile(@PathVariable Long id, @RequestBody @Valid UserDTO userDTO) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.updateUserProfile(id, userDTO));
     }
 
-    @PutMapping("/{userId}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long userId, @RequestBody UserDTO userDTO) {
-        UserDTO updatedUser = userService.updateUser(userId, userDTO);
-        if (updatedUser != null) {
-            return ResponseEntity.ok(updatedUser);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<Void> deleteUserById(@PathVariable Long id) {
+        userService.deleteUserById(id);
+        return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
-        boolean deleted = userService.deleteUser(userId);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("/users")
+    public List<UserDTO> getUsers() {
+        return userService.getUsers();
+    }
+
+    @PostMapping("/users/{userId}/orders")
+    public ResponseEntity<OrderDTO> createOrder(@PathVariable Long userId, @RequestBody @Valid OrderDTO orderDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createOrder(userId, orderDTO));
     }
 }
-

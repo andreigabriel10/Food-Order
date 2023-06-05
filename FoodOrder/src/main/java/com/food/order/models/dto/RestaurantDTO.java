@@ -1,22 +1,18 @@
 package com.food.order.models.dto;
 
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
+import java.io.Serializable;
 
 @Data
-public class RestaurantDTO {
-
-    @NotNull(message = "Restaurant ID cannot be null")
-    private Long restaurantId;
-
-    @NotNull(message = "Restaurant name cannot be null")
-    @Size(min = 1, max = 100, message = "Restaurant name must be between 1 and 100 characters")
+public class RestaurantDTO implements Serializable {
+    @NotNull
+    @NotEmpty
     private String name;
 
-    @NotNull(message = "Restaurant address cannot be null")
+    @NotNull
+    @NotEmpty
     private String address;
 
-    public RestaurantDTO(Long restaurantId, String name, String address) {
-    }
 }

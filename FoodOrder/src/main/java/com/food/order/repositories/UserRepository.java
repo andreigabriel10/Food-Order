@@ -1,15 +1,18 @@
 package com.food.order.repositories;
 
-import com.food.order.models.entities.User;
+
+import com.food.order.models.entities.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
+    UserEntity findByUsername(String username);
 
-    @Query("SELECT u FROM User u WHERE u.username = :username")
-    User findByUsername(@Param("username") String username);
+    UserEntity findByEmail(String email);
+
+    @Query(nativeQuery = true, value = "SELECT COUNT(*) FROM users")
+    Long countUsers();
 }

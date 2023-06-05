@@ -1,23 +1,32 @@
 package com.food.order.models.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.List;
 
 @Data
-public class UserDTO {
+public class UserDTO implements Serializable {
 
-    @NotNull(message = "User ID cannot be null")
-    private Long userId;
-
-    @NotNull(message = "Username cannot be null")
-    @Size(min = 1, max = 50, message = "Username must be between 1 and 50 characters")
+    @NotNull(message = "Username is a mandatory field")
+    @NotEmpty(message = "Username can't be empty")
+    @Size(min = 4, max = 20, message = "Username must be between 4 and 20 characters")
     private String username;
 
-    @Email(message = "Invalid email address")
+    @NotNull(message = "Email is a mandatory field")
+    @NotEmpty(message = "Email can't be empty")
+    @Email(message = "Please provide a valid email address")
     private String email;
 
-    public UserDTO(Long userId, String username, String email) {
-    }
+    @NotNull(message = "Full name is a mandatory field")
+    @NotEmpty(message = "Full name can't be empty")
+    private String fullName;
+
+    @Past(message = "Date of birth should be in the past")
+    private LocalDate dateOfBirth;
+
+    @NotNull(message = "Interests is a mandatory field")
+    @NotEmpty(message = "Interests can't be empty")
+    private List<String> interests;
 }
