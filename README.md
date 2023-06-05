@@ -1,5 +1,3 @@
-Certainly! Here's an example of a README file for your food order application:
-
 # Food Order Application
 
 The Food Order Application is a web-based application that allows users to place food orders and manage food items. It provides a set of REST APIs for performing CRUD operations on food items, along with additional functionality like querying, updating, and deleting food items.
